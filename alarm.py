@@ -3,6 +3,13 @@ from tkinter import *
 
 from PIL import ImageTk, Image
 
+from datetime import datetime
+from time import sleep
+import threading
+import time
+
+from pygame import mixer
+
 # colors
 bg_color = '#a89e97'
 col = '#000000'
@@ -59,10 +66,51 @@ c_period['values'] = ("AM", "PM")
 c_period.place(x=280, y=58)
 c_period.current(0)
 
+def activate_alarm():
+    t = threading.Thread(target=alarm)
+    t.start()
+
+def deactivate_alarm():
+    print('Deactivated alarm', selected.get())
+    mixer.music.stop()
+
 selected = IntVar()
 
-rad1 = Radiobutton(frame_body, font=('arial 10 bold'), value = 1, text = "Activation", bg=bg_color)
+rad1 = Radiobutton(frame_body, font=('arial 10 bold'), value = 1, text = "Activation", bg=bg_color, command=activate_alarm, variable=selected)
 rad1.place(x=125, y=95)
+
+def sound_alarm():
+    mixer.music.load('alarm.mp3')
+    mixer.music.play()
+
+    rad2 = Radiobutton(frame_body, font=('arial 10 bold'), value = 2, text = "deactivation", bg=bg_color, command=deactivate_alarm, variable=selected)
+    rad2.place(x=185, y=95)
+
+def alarm():
+    while True:
+        control = 1
+        alarm_hour = '12'
+        alarm_min = '05'
+        alarm_sec = '00'
+        alarm_period = 'AM'.upper()
+
+        now = datetime.now()
+
+        hour = now.strftime("%I")
+        minute = now.strftime("%M")
+        second = now.strftime("%S")
+        period = now.strftime("%p")
+
+        if control == 1:
+            if alarm_period == period:
+                if alarm_hour ==  hour:
+                    if alarm_min == minute:
+                        if alarm_sec == second:
+                            print("Time to wake up!")
+                            sound_alarm()
+
+
+        sleep(1)
 
 
 window.mainloop()
