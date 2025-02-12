@@ -82,17 +82,19 @@ rad1.place(x=125, y=95)
 def sound_alarm():
     mixer.music.load('alarm.mp3')
     mixer.music.play()
+    selected.set(0)
 
-    rad2 = Radiobutton(frame_body, font=('arial 10 bold'), value = 2, text = "deactivation", bg=bg_color, command=deactivate_alarm, variable=selected)
-    rad2.place(x=185, y=95)
+    rad2 = Radiobutton(frame_body, font=('arial 10 bold'), value = 2, text = "Deactivation", bg=bg_color, command=deactivate_alarm, variable=selected)
+    rad2.place(x=187, y=95)
 
 def alarm():
     while True:
         control = 1
-        alarm_hour = '12'
-        alarm_min = '05'
-        alarm_sec = '00'
-        alarm_period = 'AM'.upper()
+        alarm_hour = c_hour.get()
+        alarm_min = c_min.get()
+        alarm_sec = c_sec.get()
+        alarm_period = c_period.get()
+        alarm_period = str(alarm_period).upper()
 
         now = datetime.now()
 
@@ -112,5 +114,5 @@ def alarm():
 
         sleep(1)
 
-
+mixer.init()
 window.mainloop()
